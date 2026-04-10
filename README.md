@@ -15,7 +15,7 @@ A personal expense tracking app with dashboard, analytics & budgeting.
 - Deployed on Vercel
 
 ## 🌐 Live Demo
-[https://your-app.vercel.app]([https://your-app.vercel.app](https://spend-wise-expense-tracker-chi.vercel.app/))
+[https://your-app.vercel.app](https://spend-wise-expense-tracker-chi.vercel.app/)
 
 ## ⚠️ Note
 All data is stored in your browser only. Clearing cache = lost data.
