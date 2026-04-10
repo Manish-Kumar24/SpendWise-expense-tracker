@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SpendWise — Expense Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<div class="app-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1.5" y="4.5" width="17" height="12" rx="2.5" stroke="white" stroke-width="1.5"/>
+          <path d="M1.5 8.5h17" stroke="white" stroke-width="1.5"/>
+          <circle cx="5.5" cy="12.5" r="1" fill="white"/>
+          <circle cx="9" cy="12.5" r="1" fill="white"/>
+        </svg>
+      </div>
+      <div>
+        <div class="logo-name">SpendWise</div>
+        <div class="logo-sub">v2.0</div>
+      </div>
+    </div>
+
+    <div class="nav-section-label">Menu</div>
+    <button class="nav-item active" onclick="switchView('dashboard', this)">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2 11h7V2H2v9zm0 7h7v-5H2v5zm9 0h7v-9h-7v9zm0-16v5h7V2h-7z"/></svg>
+      Dashboard
+    </button>
+    <button class="nav-item" onclick="switchView('transactions', this)">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M3 5h14a1 1 0 000-2H3a1 1 0 000 2zm0 4h14a1 1 0 000-2H3a1 1 0 000 2zm0 4h8a1 1 0 000-2H3a1 1 0 000 2zm0 4h8a1 1 0 000-2H3a1 1 0 000 2z"/></svg>
+      Transactions
+    </button>
+    <button class="nav-item" onclick="switchView('analytics', this)">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2 17h2v-7H2v7zm4 0h2v-4H6v4zm4 0h2V8h-2v9zm4 0h2V3h-2v14z"/></svg>
+      Analytics
+    </button>
+    <button class="nav-item" onclick="switchView('budgets', this)">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a8 8 0 100 16A8 8 0 0010 2zm1 11H9v-2h2v2zm0-4H9V7h2v2z"/></svg>
+      Budgets
+    </button>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-balance-card">
+        <div class="sidebar-balance-label">Net Balance</div>
+        <div class="sidebar-balance-val" id="sb-balance" style="color:var(--accent-lite);">₹0</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div style="display:flex;flex-direction:column;gap:20px;">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div>
+        <div class="page-title" id="page-title">Dashboard</div>
+        <div class="page-date" id="page-date"></div>
+      </div>
+      <div class="topbar-actions">
+        <div class="search-wrap" id="search-container" style="display:none;">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>
+          <input type="text" class="search-input" id="search-input" placeholder="Search transactions…" oninput="renderTransactions()" />
+        </div>
+        <button class="btn-primary" onclick="openModal()">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          Add Transaction
+        </button>
+      </div>
+    </div>
+
+    <!-- DASHBOARD VIEW -->
+    <div class="view active" id="view-dashboard">
+      <div class="summary-grid">
+        <div class="summary-card income">
+          <div class="sum-icon income-icon">
+            <svg viewBox="0 0 20 20" fill="var(--success)"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+          </div>
+          <div class="sum-label">Total Income</div>
+          <div class="sum-value income" id="d-income">₹0</div>
+          <div class="sum-sub" id="d-income-count">0 transactions</div>
+        </div>
+        <div class="summary-card expense">
+          <div class="sum-icon expense-icon">
+            <svg viewBox="0 0 20 20" fill="var(--danger)"><path fill-rule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+          </div>
+          <div class="sum-label">Total Expenses</div>
+          <div class="sum-value expense" id="d-expense">₹0</div>
+          <div class="sum-sub" id="d-expense-count">0 transactions</div>
+        </div>
+        <div class="summary-card balance">
+          <div class="sum-icon balance-icon">
+            <svg viewBox="0 0 20 20" fill="var(--accent-lite)"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4zm14 5H2v5a2 2 0 002 2h12a2 2 0 002-2V9zm-7 3a1 1 0 110 2 1 1 0 010-2zm3 1a1 1 0 102 0 1 1 0 00-2 0z"/></svg>
+          </div>
+          <div class="sum-label">Net Balance</div>
+          <div class="sum-value balance" id="d-balance">₹0</div>
+          <div class="sum-sub" id="d-savings-rate">Savings rate: 0%</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <!-- Recent Transactions -->
+        <div class="section-card">
+          <div class="section-head">
+            <div class="section-title">
+              <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
+              Recent Activity
+            </div>
+            <button class="filter-chip" onclick="switchView('transactions', document.querySelectorAll('.nav-item')[1])">View all</button>
+          </div>
+          <div class="section-body">
+            <div class="tx-list" id="dash-recent-list"></div>
+          </div>
+        </div>
+
+        <!-- Spending by Category -->
+        <div class="section-card">
+          <div class="section-head">
+            <div class="section-title">
+              <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"/></svg>
+              Spending by Category
+            </div>
+            <select class="period-select" id="dash-period" onchange="renderDashboard()">
+              <option value="all">All time</option>
+              <option value="month" selected>This month</option>
+              <option value="week">This week</option>
+            </select>
+          </div>
+          <div class="section-body">
+            <div class="cat-bar-list" id="dash-cat-chart"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRANSACTIONS VIEW -->
+    <div class="view" id="view-transactions">
+      <div class="section-card">
+        <div class="section-head">
+          <div class="section-title">All Transactions</div>
+          <div class="filter-wrap">
+            <button class="filter-chip active" onclick="setFilter('all',this)">All</button>
+            <button class="filter-chip" onclick="setFilter('income',this)">Income</button>
+            <button class="filter-chip" onclick="setFilter('expense',this)">Expense</button>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="tx-list" id="tx-main-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANALYTICS VIEW -->
+    <div class="view" id="view-analytics">
+      <div class="analytic-stats">
+        <div class="a-stat">
+          <div class="a-stat-label">Avg/day spending</div>
+          <div class="a-stat-val" id="an-avgday" style="color:var(--danger);">₹0</div>
+        </div>
+        <div class="a-stat">
+          <div class="a-stat-label">Largest expense</div>
+          <div class="a-stat-val" id="an-largest" style="color:var(--warning);">₹0</div>
+        </div>
+        <div class="a-stat">
+          <div class="a-stat-label">Savings rate</div>
+          <div class="a-stat-val" id="an-savings" style="color:var(--success);">0%</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <!-- Category Breakdown -->
+        <div class="section-card">
+          <div class="section-head">
+            <div class="section-title">Category Breakdown</div>
+          </div>
+          <div class="section-body">
+            <div class="cat-bar-list" id="an-cat-chart"></div>
+          </div>
+        </div>
+
+        <!-- Donut -->
+        <div class="section-card">
+          <div class="section-head">
+            <div class="section-title">Expense Distribution</div>
+          </div>
+          <div class="section-body">
+            <div class="donut-wrap">
+              <svg class="donut-svg" id="donut-svg" width="160" height="160" viewBox="0 0 160 160"></svg>
+              <div class="donut-legend" id="donut-legend"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monthly Trend -->
+      <div class="section-card">
+        <div class="section-head">
+          <div class="section-title">Monthly Trend</div>
+        </div>
+        <div class="section-body sparkline-wrap">
+          <svg id="trend-svg" class="spark-svg" height="160"></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUDGETS VIEW -->
+    <div class="view" id="view-budgets">
+      <div class="section-card">
+        <div class="section-head">
+          <div class="section-title">Manage Budgets</div>
+        </div>
+        <div class="section-body">
+          <div class="budget-form">
+            <div class="budget-form-row">
+              <div class="field">
+                <label>Category</label>
+                <select id="budget-cat">
+                  <option value="Food">Food & Dining</option>
+                  <option value="Transport">Transport</option>
+                  <option value="Shopping">Shopping</option>
+                  <option value="Bills">Bills & Utilities</option>
+                  <option value="Health">Health</option>
+                  <option value="Entertainment">Entertainment</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Monthly Limit (₹)</label>
+                <input type="number" id="budget-limit" placeholder="e.g. 5000" min="1" />
+              </div>
+              <button class="btn-add-budget" onclick="addBudget()">Set Budget</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-head">
+          <div class="section-title">Budget Progress</div>
+        </div>
+        <div class="section-body">
+          <div class="budget-list" id="budget-progress-list"></div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-head">
+          <div class="section-title">Active Budgets</div>
+        </div>
+        <div class="section-body">
+          <div class="budget-items-list" id="budget-manage-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Transaction Modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">Add Transaction</div>
+      <button class="modal-close" onclick="closeModal()">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      </button>
+    </div>
+
+    <div class="type-toggle">
+      <button class="type-btn exp-active" id="btn-expense" onclick="setType('expense')">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+        Expense
+      </button>
+      <button class="type-btn" id="btn-income" onclick="setType('income')">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+        Income
+      </button>
+    </div>
+
+    <div class="field">
+      <label>Description</label>
+      <input type="text" id="inp-desc" placeholder="e.g. Grocery shopping" />
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Amount (₹)</label>
+        <input type="number" id="inp-amount" placeholder="0.00" min="0" step="0.01" />
+      </div>
+      <div class="field">
+        <label>Date</label>
+        <input type="date" id="inp-date" />
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Category</label>
+        <select id="inp-cat">
+          <option value="Food">Food & Dining</option>
+          <option value="Transport">Transport</option>
+          <option value="Shopping">Shopping</option>
+          <option value="Bills">Bills & Utilities</option>
+          <option value="Health">Health</option>
+          <option value="Entertainment">Entertainment</option>
+          <option value="Salary">Salary</option>
+          <option value="Freelance">Freelance</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Note (optional)</label>
+        <input type="text" id="inp-note" placeholder="Extra detail…" />
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveTransaction()">Save Transaction</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <div class="toast-dot" id="toast-dot"></div>
+  <span id="toast-msg">Done</span>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
