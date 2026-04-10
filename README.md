@@ -2,7 +2,7 @@
 
 A clean, modern personal expense tracker with dashboard analytics, category budgets, and local data persistence.
 
-![SpendWise Dashboard](https://via.placeholder.com/800x400/07111d/5baaee?text=SpendWise+Preview)
+![SpendWise Dashboard Preview](images/dashboard-preview.png "SpendWise Dashboard")
 
 ## 🚀 Live Demo
 
