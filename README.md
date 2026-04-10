@@ -28,3 +28,10 @@ A clean, modern personal expense tracker with dashboard analytics, category budg
 | Vanilla JavaScript | Logic, DOM manipulation, charts |
 | localStorage | Client-side data persistence |
 | Vercel | Deployment & hosting |
+
+## 📄 License
+
+MIT License — free to use, modify, and deploy.
+
+---
+> 💰 SpendWise — Made with ❤️ & ☕ by Manish
